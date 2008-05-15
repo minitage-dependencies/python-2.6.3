@@ -1,20 +1,11 @@
 import os
-import zc.buildout
 
+from minitage.core.common import append_env_var
 
 os_ldflags=''
 uname=os.uname()[0]
 if uname == 'Darwin':
     os_ldflags=' -mmacosx-version-min=10.5.0'
-
-
-def append_env_var(env,var,sep=":",before=True):
-    """ append text to a environnement variable
-    @param env String variable to set
-    @param before append before or after the variable"""
-    for path in var:
-    	if before:os.environ[env] = "%s%s%s" % (path,sep,os.environ.get(env,''))
-	else:os.environ[env] = "%s%s%s" % (os.environ.get(env,''),sep,path)
 
 
 def getpythonenv(options,buildout):
