@@ -8,7 +8,7 @@ if uname == 'Darwin':
     os_ldflags=' -mmacosx-version-min=10.5.0'
 
 
-def appendEnvVar(env,var,sep=":",before=True):
+def append_env_var(env,var,sep=":",before=True):
     """ append text to a environnement variable
     @param env String variable to set
     @param before append before or after the variable"""
@@ -20,17 +20,17 @@ def appendEnvVar(env,var,sep=":",before=True):
 def getpythonenv(options,buildout):
     """ add needed submodules to the Setup.local as python cannot see shared libraries in non standard places """
     for var in ['zlib','db', 'readline', 'bzip2', 'ncurses','openssl','expat']:
-        appendEnvVar('LD_RUN_PATH',  ["%(lib)s/lib"%{'lib':buildout[var]['location']}],sep=':',before=False)
-        appendEnvVar('LDFLAGS',   [ os_ldflags ],sep=' ',before=False)
-        appendEnvVar('CFLAGS',   ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
-        appendEnvVar('CPPFLAGS', ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
-        appendEnvVar('CXXFLAGS', ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
+        append_env_var('LD_RUN_PATH',  ["%(lib)s/lib"%{'lib':buildout[var]['location']}],sep=':',before=False)
+        append_env_var('LDFLAGS',   [ os_ldflags ],sep=' ',before=False)
+        append_env_var('CFLAGS',   ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
+        append_env_var('CPPFLAGS', ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
+        append_env_var('CXXFLAGS', ["-I%s/include "%(buildout[var]['location'])],sep=' ',before=False)
 
     if uname == 'Darwin':
-        appendEnvVar('CFLAGS',   [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
-        appendEnvVar('OPT',      [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
-        appendEnvVar('CPPFLAGS', [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
-        appendEnvVar('CXXFLAGS', [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
+        append_env_var('CFLAGS',   [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
+        append_env_var('OPT',      [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
+        append_env_var('CPPFLAGS', [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
+        append_env_var('CXXFLAGS', [" -D__DARWIN_UNIX03 "],sep=' ',before=False)
 
     compile_dir=options['compile-directory']
     if os.path.isdir(compile_dir):
