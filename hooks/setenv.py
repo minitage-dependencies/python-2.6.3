@@ -52,5 +52,5 @@ _bsddb _bsddb.c %(db)s
 )
     myfile.close()
     os.environ['OPT'] = os.environ['CFLAGS']
-    os.environ['MACOSX_DEPLOYMENT_TARGET'] = os.environ['10.5']
+    os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.5'
 # vim:set ts=4 sts=4 et  :
