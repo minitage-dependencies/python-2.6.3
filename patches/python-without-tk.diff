@@ -1,15 +1,15 @@
---- setup.py.orig	2008-03-23 10:03:47.000000000 +0100
-+++ setup.py	2008-03-23 10:15:29.000000000 +0100
-@@ -1155,162 +1155,162 @@
-         self.detect_tkinter(inc_dirs, lib_dirs)
+--- setup.py	2009-03-31 20:20:48.000000000 +0200
++++ setup.py.new	2009-05-27 11:59:24.000000000 +0200
+@@ -1455,192 +1455,193 @@
+         return missing
  
      def detect_tkinter_darwin(self, inc_dirs, lib_dirs):
 -        # The _tkinter module, using frameworks. Since frameworks are quite
 -        # different the UNIX search logic is not sharable.
 -        from os.path import join, exists
 -        framework_dirs = [
--            '/System/Library/Frameworks/',
 -            '/Library/Frameworks',
+-            '/System/Library/Frameworks/',
 -            join(os.getenv('HOME'), '/Library/Frameworks')
 -        ]
 -
@@ -46,11 +46,29 @@
 -        include_dirs.append('/usr/X11R6/include')
 -        frameworks = ['-framework', 'Tcl', '-framework', 'Tk']
 -
+-        # All existing framework builds of Tcl/Tk don't support 64-bit
+-        # architectures.
+-        cflags = sysconfig.get_config_vars('CFLAGS')[0]
+-        archs = re.findall('-arch\s+(\w+)', cflags)
+-        if 'x86_64' in archs or 'ppc64' in archs:
+-            try:
+-                archs.remove('x86_64')
+-            except ValueError:
+-                pass
+-            try:
+-                archs.remove('ppc64')
+-            except ValueError:
+-                pass
+-
+-            for a in archs:
+-                frameworks.append('-arch')
+-                frameworks.append(a)
+-
 -        ext = Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'],
 -                        define_macros=[('WITH_APPINIT', 1)],
 -                        include_dirs = include_dirs,
 -                        libraries = [],
--                        extra_compile_args = frameworks,
+-                        extra_compile_args = frameworks[2:],
 -                        extra_link_args = frameworks,
 -                        )
 -        self.extensions.append(ext)
@@ -58,8 +76,8 @@
 +#        # different the UNIX search logic is not sharable.
 +#        from os.path import join, exists
 +#        framework_dirs = [
-+#            '/System/Library/Frameworks/',
 +#            '/Library/Frameworks',
++#            '/System/Library/Frameworks/',
 +#            join(os.getenv('HOME'), '/Library/Frameworks')
 +#        ]
 +#
@@ -96,11 +114,29 @@
 +#        include_dirs.append('/usr/X11R6/include')
 +#        frameworks = ['-framework', 'Tcl', '-framework', 'Tk']
 +#
++#        # All existing framework builds of Tcl/Tk don't support 64-bit
++#        # architectures.
++#        cflags = sysconfig.get_config_vars('CFLAGS')[0]
++#        archs = re.findall('-arch\s+(\w+)', cflags)
++#        if 'x86_64' in archs or 'ppc64' in archs:
++#            try:
++#                archs.remove('x86_64')
++#            except ValueError:
++#                pass
++#            try:
++#                archs.remove('ppc64')
++#            except ValueError:
++#                pass
++#
++#            for a in archs:
++#                frameworks.append('-arch')
++#                frameworks.append(a)
++#
 +#        ext = Extension('_tkinter', ['_tkinter.c', 'tkappinit.c'],
 +#                        define_macros=[('WITH_APPINIT', 1)],
 +#                        include_dirs = include_dirs,
 +#                        libraries = [],
-+#                        extra_compile_args = frameworks,
++#                        extra_compile_args = frameworks[2:],
 +#                        extra_link_args = frameworks,
 +#                        )
 +#        self.extensions.append(ext)
@@ -210,6 +246,18 @@
 -                        library_dirs = added_lib_dirs,
 -                        )
 -        self.extensions.append(ext)
+-
+-##         # Uncomment these lines if you want to play with xxmodule.c
+-##         ext = Extension('xx', ['xxmodule.c'])
+-##         self.extensions.append(ext)
+-
+-        # XXX handle these, but how to detect?
+-        # *** Uncomment and edit for PIL (TkImaging) extension only:
+-        #       -DWITH_PIL -I../Extensions/Imaging/libImaging  tkImaging.c \
+-        # *** Uncomment and edit for TOGL extension only:
+-        #       -DWITH_TOGL togl.c \
+-        # *** Uncomment these for TOGL extension only:
+-        #       -lGL -lGLU -lXext -lXmu \
 +#        # The _tkinter module.
 +#
 +#        # Rather than complicate the code below, detecting and building
@@ -312,14 +360,19 @@
 +#                        library_dirs = added_lib_dirs,
 +#                        )
 +#        self.extensions.append(ext)
- 
- ##         # Uncomment these lines if you want to play with xxmodule.c
- ##         ext = Extension('xx', ['xxmodule.c'])
-@@ -1323,6 +1323,7 @@
-         #       -DWITH_TOGL togl.c \
-         # *** Uncomment these for TOGL extension only:
-         #       -lGL -lGLU -lXext -lXmu \
++#
++###         # Uncomment these lines if you want to play with xxmodule.c
++###         ext = Extension('xx', ['xxmodule.c'])
++###         self.extensions.append(ext)
++#
++#        # XXX handle these, but how to detect?
++#        # *** Uncomment and edit for PIL (TkImaging) extension only:
++#        #       -DWITH_PIL -I../Extensions/Imaging/libImaging  tkImaging.c \
++#        # *** Uncomment and edit for TOGL extension only:
++#        #       -DWITH_TOGL togl.c \
++#        # *** Uncomment these for TOGL extension only:
++#        #       -lGL -lGLU -lXext -lXmu \
 +        return 1
  
-     def configure_ctypes(self, ext):
-         if not self.use_system_libffi:
+     def configure_ctypes_darwin(self, ext):
+         # Darwin (OS X) uses preconfigured files, in
