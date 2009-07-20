@@ -26,8 +26,9 @@ cPickle cPickle.c
 pyexpat pyexpat.c -DHAVE_EXPAT_H %(expat)s
 _bsddb _bsddb.c %(db)s
 """ % {
- 'db': '-I%(db)s/include -L%(db)s/lib -Wl,-rpath,%(db)s/lib -ldb-4.4' % {
-     'db': os.path.abspath(buildout['db']['location'])
+ 'db': '-I%(db)s/include -L%(db)s/lib -Wl,-rpath,%(db)s/lib -ldb-%(dbv)s' % {
+     'db': os.path.abspath(buildout['db']['location']),
+     'dbv': buildout['db']['version']
  },
  'readline': '-I%(readline)s/include -L%(readline)s/lib -Wl,-rpath,%(readline)s/lib -lhistory -lreadline' % {
      'readline': os.path.abspath(buildout['readline']['location'])
