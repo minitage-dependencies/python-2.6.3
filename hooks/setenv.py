@@ -1,15 +1,15 @@
 import os, sys
 import re
-def getpythonenv(options,buildout):
-    """Where python looks to get its cflags."""
-    if os.uname()[0] == 'Darwin':
-        # regenerating ./configure
-        cwd = os.getcwd()
-        os.chdir(options['compile-directory'])
-        os.system('autoconf -v -f')
-        os.chdir(cwd)
+#ef getpythonenv(options,buildout):
+#   """Where python looks to get its cflags."""
+#   if os.uname()[0] == 'Darwin':
+#       # regenerating ./configure
+#       cwd = os.getcwd()
+#       os.chdir(options['compile-directory'])
+#       os.system('autoconf -v -f')
+#       os.chdir(cwd)
 #    os.environ['OPT'] = os.environ['CFLAGS']
-
+#
 #   crypt=''
 #   if os.uname()[0] != 'Darwin':
 #       crypt=' -lcrypt ' 
