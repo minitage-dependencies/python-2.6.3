@@ -1,8 +1,20 @@
 Index: setup.py
 ===================================================================
---- setup.py	(revision 75204)
-+++ setup.py	(working copy)
-@@ -561,9 +561,9 @@
+--- setup.py	(révision 75204)
++++ setup.py	(copie de travail)
+@@ -361,7 +361,10 @@
+         # lib_dirs and inc_dirs are used to search for files;
+         # if a file is found in one of those directories, it can
+         # be assumed that no additional -I,-L directives are needed.
+-        lib_dirs = self.compiler.library_dirs + [
++        mlib_dirs = []
++        for i in os.environ.get('LD_RUN_PATH', '').split(':'):
++            mlib_dirs.append(i)
++        lib_dirs = mlib_dirs + self.compiler.library_dirs + [
+             '/lib64', '/usr/lib64',
+             '/lib', '/usr/lib',
+             ]
+@@ -561,9 +564,9 @@
              # the readline module unless the user has installed a fixed
              # readline package
              # FIXME: The readline emulation on 10.5 is better, but the
@@ -15,7 +27,7 @@ Index: setup.py
          if do_readline:
              if sys.platform == 'darwin':
                  # In every directory on the search path search for a dynamic
-@@ -595,7 +595,7 @@
+@@ -595,7 +598,7 @@
          else:
              missing.append('readline')
  
@@ -24,7 +36,7 @@ Index: setup.py
              # crypt module.
  
              if self.compiler.find_library_file(lib_dirs, 'crypt'):
-@@ -633,8 +633,9 @@
+@@ -633,8 +636,9 @@
          if (ssl_incs is not None and
              ssl_libs is not None):
              exts.append( Extension('_ssl', ['_ssl.c'],
@@ -36,7 +48,7 @@ Index: setup.py
                                     libraries = ['ssl', 'crypto'],
                                     depends = ['socketmodule.h']), )
          else:
-@@ -872,9 +873,10 @@
+@@ -872,9 +876,10 @@
              # is on an NFS server that goes away).
              exts.append(Extension('_bsddb', ['_bsddb.c'],
                                    depends = ['bsddb.h'],
@@ -50,7 +62,7 @@ Index: setup.py
                                    libraries=dblibs))
          else:
              if db_setup_debug: print "db: no appropriate library found"
-@@ -1108,8 +1110,8 @@
+@@ -1108,8 +1113,8 @@
              missing.append('_curses')
  
          # If the curses module is enabled, check for the panel module
@@ -61,7 +73,7 @@ Index: setup.py
              exts.append( Extension('_curses_panel', ['_curses_panel.c'],
                                     libraries = [panel_library] + curses_libs) )
          else:
-@@ -1203,7 +1205,10 @@
+@@ -1203,7 +1208,10 @@
  
          exts.append(Extension('pyexpat',
                                define_macros = define_macros,
@@ -73,7 +85,7 @@ Index: setup.py
                                sources = ['pyexpat.c',
                                           'expat/xmlparse.c',
                                           'expat/xmlrole.c',
-@@ -1218,7 +1223,10 @@
+@@ -1218,7 +1226,10 @@
              define_macros.append(('USE_PYEXPAT_CAPI', None))
              exts.append(Extension('_elementtree',
                                    define_macros = define_macros,
