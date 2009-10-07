@@ -47,6 +47,7 @@ imports = ['ctypes',
            '_elementtree',
            'pyexpat',
            'bz2',
+           'gestalt',
            'curses',
            'bsddb']
 
@@ -69,4 +70,10 @@ for i in imports:
 if not ('Minitage' in urllib2.urlopen('https://www.minitage.org').read()):
     msg("Problem with ssl layer")
 
+
+
+if sys.platform == 'darwin':
+
+    import platform
+    print platform.mac_ver()
 
